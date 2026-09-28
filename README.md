@@ -29,12 +29,12 @@ Sem `BACKEND_URL`, a loja exibe um catálogo ilustrativo explicitamente marcado 
 Copie `.env.example` para `.env.local` e configure:
 
 ```dotenv
-BACKEND_URL=https://sistema-dscommerce-production.up.railway.app
+BACKEND_URL=
 OAUTH_CLIENT_ID=myclientid
 OAUTH_CLIENT_SECRET=myclientsecret
 ```
 
-Confirme o domínio atual do seu serviço. Os valores OAuth precisam corresponder às variáveis `CLIENT_ID` e `CLIENT_SECRET` do Spring. Os valores acima são os padrões de desenvolvimento do projeto; se foram alterados no Railway, use os valores configurados lá. Reinicie o servidor Next.js depois de editar variáveis.
+Preencha `BACKEND_URL` com a URL HTTPS atual do seu serviço no Railway, somente em `.env.local` ou nas variáveis de ambiente da Netlify. Os valores OAuth precisam corresponder às variáveis `CLIENT_ID` e `CLIENT_SECRET` do Spring. Os valores OAuth acima são os padrões de desenvolvimento do projeto; se foram alterados no Railway, use os valores configurados lá. Reinicie o servidor Next.js depois de editar variáveis.
 
 Não coloque credenciais do PostgreSQL no front. Não use prefixo `NEXT_PUBLIC_` nas variáveis acima nem versione `.env.local`.
 
@@ -80,6 +80,8 @@ As coleções usam a busca textual disponível no endpoint do projeto. No catál
 3. Build: `npm run build`. Publish directory: `.next`. O adaptador Next.js é detectado automaticamente.
 4. Configure `BACKEND_URL`, `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` nas variáveis de ambiente da Netlify, disponíveis no build e nas Functions/runtime.
 5. Publique e escolha `natan-commerce` como nome, se disponível.
+
+Se a Netlify informar `Secret env var "BACKEND_URL"'s value detected`, confira se a URL real foi copiada para arquivos versionados como `.env.example` ou este README. Mantenha o valor apenas nas variáveis de ambiente, envie a correção ao repositório e faça um novo deploy. A verificação de segredos pode permanecer ativa.
 
 É necessário hospedar com suporte ao servidor Next.js (as rotas `/api` não funcionam em exportação estática). Consulte a [documentação oficial da Netlify](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/).
 
