@@ -202,7 +202,7 @@ export default function Storefront() {
 
     <footer className="footer"><div className="footer-main shell"><div><a className="brand" href="#"><span className="brand-mark">n<span>↗</span></span><span>natan<span className="brand-sub">COMMERCE</span></span><i /></a><p>Tecnologia para o que vem a seguir.</p></div><div><strong>Explore</strong><button onClick={() => browse()}>Todos os produtos</button><button onClick={() => browse("PC Gamer", "PC Gamer")}>Universo gamer</button></div><div><strong>Seu espaço</strong><button onClick={() => { setReturnToCart(false); open(user ? "account" : "login"); }}>Minha conta e pedidos</button><button onClick={() => open("cart")}>Meu carrinho</button></div><div className="footer-note"><span className="status-dot" /> CONSTRUÍDO PARA CONECTAR<p>Uma experiência de e-commerce<br />por Natanael Pereira.</p></div></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} Natan Commerce · Projeto de portfólio.</span><button onClick={() => open("about")}>Sobre esta experiência <ArrowUpRight size={13} /></button><span>DESIGNED FOR THE NEXT.</span></div></footer>
 
-    <div className={`toast ${toast ? "visible" : ""}`} role="status" aria-live="polite">{toast && <><CheckCircle2 size={19} />{toast}<button aria-label="Fechar aviso" onClick={() => setToast("")}><X size={16} /></button></>}</div>
+    {!panel && <CartToast message={toast} onClose={() => setToast("")} />}
 
     <dialog ref={dialog} className={`store-dialog ${panel === "cart" ? "drawer" : ""}`} aria-labelledby="dialog-title" onCancel={event => { if (busy) event.preventDefault(); else open(null); }} onClick={event => { if (event.target === event.currentTarget && !busy) open(null); }}>
       <div className="dialog-content"><div className="dialog-heading"><div><span className="eyebrow muted">NATAN COMMERCE</span><h2 id="dialog-title">{panelTitle}</h2></div><button className="icon-button" aria-label="Fechar janela" disabled={busy} onClick={() => open(null)}><X /></button></div>
@@ -215,6 +215,11 @@ export default function Storefront() {
         {panel === "order" && order && <div className="order-detail"><div className="order-status"><Check size={24} /><span>{({ WAITING_PAYMENT: "Aguardando pagamento", PAID: "Pago", SHIPPED: "Enviado", DELIVERED: "Entregue", CANCELED: "Cancelado" } as Record<string, string>)[order.status] || order.status}</span></div><p>Registrado em {new Date(order.moment).toLocaleString("pt-BR")}. Guarde o número <strong>#{order.id}</strong> para consultar depois.</p>{order.items.map(item => <div className="order-line" key={item.productId}><span>{item.quantity}× {item.name}</span><strong>{money(item.subTotal ?? item.price * item.quantity)}</strong></div>)}<div className="order-total"><span>Total do pedido</span><strong>{money(order.total)}</strong></div><p className="form-help">Pedido registrado na loja. Nenhum pagamento é processado neste site.</p><button className="button primary full" onClick={() => open(null)}>Continuar explorando <ArrowRight size={18} /></button></div>}
         {panel === "about" && <div className="about-content"><span className="about-symbol">n↗</span><p>A Natan Commerce nasceu para conectar pessoas às possibilidades da tecnologia, com uma experiência simples, bonita e acessível.</p><p>Este é um projeto de portfólio de <strong>Natanael Pereira</strong>. Você pode explorar produtos, montar seu carrinho e, quando conectado à loja, entrar com uma conta existente e registrar pedidos.</p><p>Não há cobrança, processamento de pagamentos ou serviço de entrega nesta experiência.</p><button className="button primary full" onClick={() => { open(null); browse(); }}>Vamos explorar <ArrowUpRight size={18} /></button></div>}
       </div>
+      {panel && <CartToast message={toast} onClose={() => setToast("")} />}
     </dialog>
   </>;
+}
+
+function CartToast({ message, onClose }: { message: string; onClose: () => void }) {
+  return <div className={`toast ${message ? "visible" : ""}`} role="status" aria-live="polite">{message && <><CheckCircle2 size={19} />{message}<button aria-label="Fechar aviso" onClick={onClose}><X size={16} /></button></>}</div>;
 }
