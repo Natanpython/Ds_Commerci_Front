@@ -79,7 +79,8 @@ As coleções usam a busca textual disponível no endpoint do projeto. No catál
 2. Conecte o repositório na Netlify. Para um repositório só do front, use a raiz como **Base directory**. Se o front permanecer dentro do repositório Java, defina **Base directory** como `front end`.
 3. Build: `npm run build`. Publish directory: `.next`. O adaptador Next.js é detectado automaticamente.
 4. Configure `BACKEND_URL`, `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` nas variáveis de ambiente da Netlify, disponíveis no build e nas Functions/runtime.
-5. Publique e escolha `natan-commerce` como nome, se disponível.
+5. Configure `APP_URL` com a URL HTTPS pública do front, disponível nas Functions/runtime. Essa URL é usada para validar a origem do login e das demais ações, mesmo quando o proxy da hospedagem usa uma URL interna. Para domínios personalizados ou previews, configure a URL correspondente ao contexto. Localmente, deixe vazia para usar a origem da requisição.
+6. Publique e escolha `natan-commerce` como nome, se disponível. Se mudar o domínio, atualize `APP_URL` e faça um novo deploy.
 
 Se a Netlify informar `Secret env var ... value detected` para `BACKEND_URL`, `OAUTH_CLIENT_ID` ou `OAUTH_CLIENT_SECRET`, confira se os valores foram copiados para arquivos versionados como `.env.example` ou este README. Mantenha os valores apenas em `.env.local` (ignorado pelo Git) ou nas variáveis de ambiente da Netlify, envie a correção ao repositório e faça um novo deploy. Mantenha a verificação de segredos ativa.
 

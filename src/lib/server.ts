@@ -11,7 +11,19 @@ export class ApiError extends Error {
 
 export function checkOrigin(request: NextRequest) {
   const origin = request.headers.get("origin");
-  if (!origin || origin !== request.nextUrl.origin) {
+  // Behind a hosting proxy, nextUrl may contain an internal origin.
+  // Trust only the explicit public URL, never forwarded request headers.
+  let expectedOrigin = request.nextUrl.origin;
+  if (process.env.APP_URL?.trim()) {
+    try {
+      const publicUrl = new URL(process.env.APP_URL.trim());
+      if (!["http:", "https:"].includes(publicUrl.protocol)) throw new Error("Invalid protocol");
+      expectedOrigin = publicUrl.origin;
+    } catch {
+      throw new ApiError("A URL pública da loja está configurada incorretamente.", 503);
+    }
+  }
+  if (!origin || origin !== expectedOrigin) {
     throw new ApiError("Origem da solicitação inválida. Recarregue a página.", 403);
   }
 }
